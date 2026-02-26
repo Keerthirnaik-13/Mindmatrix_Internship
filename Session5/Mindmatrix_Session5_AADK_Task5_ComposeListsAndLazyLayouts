@@ -1,0 +1,141 @@
+package com.example.session5lab
+
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+
+class MainActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                StudentListScreen()
+            }
+        }
+    }
+}
+
+/* -----------------------------
+   DATA CLASS
+------------------------------ */
+
+data class Student(
+    val name: String,
+    val course: String
+)
+
+/* -----------------------------
+   SAMPLE DATA
+------------------------------ */
+
+val studentList = listOf(
+    Student("Keerthi", "Android Development"),
+    Student("Rahul", "Web Development"),
+    Student("Sneha", "Data Science"),
+    Student("Arjun", "Cloud Computing"),
+    Student("Divya", "AI & ML"),
+    Student("Rohan", "Cyber Security"),
+    Student("Anjali", "Full Stack Development"),
+    Student("Vikram", "DevOps"),
+    Student("Megha", "UI/UX Design"),
+    Student("Kiran", "Software Testing"),
+    Student("Aisha", "Blockchain"),
+    Student("Manoj", "Game Development")
+)
+
+/* -----------------------------
+   LAZY COLUMN SCREEN
+------------------------------ */
+
+@Composable
+fun StudentListScreen() {
+
+    val context = LocalContext.current
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(12.dp)
+    ) {
+        items(studentList) { student ->
+            StudentItem(
+                student = student,
+                onClick = {
+                    Toast.makeText(
+                        context,
+                        "${student.name} clicked",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            )
+        }
+    }
+}
+
+/* -----------------------------
+   REUSABLE ITEM UI
+------------------------------ */
+
+@Composable
+fun StudentItem(
+    student: Student,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { onClick() },
+        elevation = CardDefaults.cardElevation(6.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // Optional: Replace with your own drawable image
+            /*
+            Image(
+                painter = painterResource(id = R.drawable.ic_profile),
+                contentDescription = "Profile Image",
+                modifier = Modifier.size(50.dp)
+            )
+            */
+
+            Column(
+                modifier = Modifier
+                    .padding(start = 12.dp)
+            ) {
+                Text(
+                    text = student.name,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = student.course,
+                    fontSize = 14.sp
+                )
+            }
+        }
+    }
+}
